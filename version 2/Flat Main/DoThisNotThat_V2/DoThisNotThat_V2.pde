@@ -8,19 +8,18 @@ color black=#000000, white=#FFFFE1; //Night Mode, blue is 00, white is not night
 Boolean rectON=false, ellipseON=false;
 //
 String buttonText1= "Click Me";
-String buttonText2= "Or Me";
 PFont buttonFont;
 color purple = #2C08FF; //Note Night Mode Friendly, all of the blue is included
 //
-void setup() 
+void setup()
 {
   //Display Geometry
-  fullScreen(); //displayWidth, displayHeight
+  size( 600, 400 ); //fullScreen(); //displayWidth, displayHeight
   //Display Orientation: Landscape, not portrait nor square
   println (width, height, displayWidth, displayHeight);
   //Swap display key variables for testing
-  int appWidth = displayWidth;
-  int appHeight = displayHeight;
+  int appWidth = width; //displayWidth
+  int appHeight = height; //displayHeight
   //With Strings, easier to print to console or canvas
   String ls="Landscape or Square", p="portrait", DO="Display Orientation:", instruct="Bru, turn your phun";
   String orientation = ( appWidth >= appHeight ) ? ls : p ; //Ternary Operator, repeats IF-ELSE to populate var
@@ -30,9 +29,9 @@ void setup()
     println("Good to Go");
   } else { //Break our app if not landscape
     println(instruct);
-    appWidth = appWidth*0;
-    appHeight = appHeight*0;
-  }
+    appWidth *= 0; //assignment opperator, works like appWidth=appWidth*00
+    appHeight *= 0;
+  } 
   println("App Geometry is:", "\tApp Width:", appWidth, "\t\tApp Height:", appHeight);
   //
   //Population
@@ -40,10 +39,6 @@ void setup()
   buttonY1 = appHeight*3/4;
   buttonWidth1 = appWidth*1/5;
   buttonHeight1 = appHeight*1/5;
-  buttonX2 = appWidth*3/4;
-  buttonY2 = buttonY1;
-  buttonWidth2 = buttonWidth1;
-  buttonHeight2 = buttonHeight1;
   rectDisplayX = appWidth*1/8;
   rectDisplayY = appHeight*1/8;
   rectDisplayWidth = buttonWidth1;
@@ -66,37 +61,43 @@ void setup()
   buttonFont = createFont ("Harrington", 55); //Must also Tools / Create Font / Find Font / Do Not Press "OK"
 }//End setup
 //
-void draw() 
+void draw()
 {
   background(black);
   rect(buttonX1, buttonY1, buttonWidth1, buttonHeight1); //DIV: "Click Me"
-  rect(buttonX2, buttonY2, buttonWidth2, buttonHeight2); //DIV: "Or Me"
   if (rectON==true && ellipseON==false) rect(rectDisplayX, rectDisplayY, rectDisplayWidth, rectDisplayHeight); //DIV: Display Rectangle
-  //rect(ellipseX, ellipseY, ellipseXDiameter, ellipseYDiameter); //DIV: Display Circle
+  //rect(ellipseX, ellipseY, ellipseXDiameter, ellipseYDiameter); //DIV: Display Ellipse
   if (rectON==false && ellipseON==true) ellipse(x, y, xDiameter, yDiameter);
   //
   //Text Draw, General Code for any text
   //Note: visualization rectangle is in main program
   fill(purple); //Ink, hexidecimal copied from Color Selector
-  textAlign (CENTER, CENTER); //Allign X&Y, see Processing.org / Reference
+  textAlign (CENTER, CENTER); //Align X&Y, see Processing.org / Reference
   //Values: [LEFT | CENTER | RIGHT] & [TOP | CENTER | BOTTOM | BASELINE]
-  textFont(buttonFont, 80); //Change the number until it fits, largest font size
+  textFont(buttonFont, 25); //Change the number until it fits, largest font size
   //
   //Specific Text per button
   text(buttonText1, buttonX1, buttonY1, buttonWidth1, buttonHeight1);
-  text(buttonText2, buttonX2, buttonY2, buttonWidth2, buttonHeight2);
   fill(white);
 }//End draw
 //
-void keyPressed() 
-{}//End keyPressed
+void keyPressed() {
+}//End keyPressed
 //
-void mousePressed() 
+void mousePressed()
 {
-  rectON = false;
-  ellipseON = false;
-  if ( mouseX>=buttonX1 && mouseX<=buttonX1+buttonWidth1 && mouseY>=buttonY1 && mouseY<=buttonY1+buttonHeight1 ) rectON = true;
-  if ( mouseX>=buttonX2 && mouseX<=buttonX2+buttonWidth2 && mouseY>=buttonY2 && mouseY<=buttonY2+buttonHeight2 ) ellipseON = true;
+  println("Before the Button:", "\tRect", rectON, "\tEllipse", ellipseON);
+  //Note: "Third Button" is deleted due to Boolean Logic Error
+  //Need button specifically to Reset Variables
+  if ( mouseX>=buttonX1 && mouseX<=buttonX1+buttonWidth1 && mouseY>=buttonY1 && mouseY<=buttonY1+buttonHeight1 ) {
+    if ( rectON==true ) {
+      rectON=false;
+      ellipseON=true;
+    } else {
+      rectON=true;
+      ellipseON=false;
+    }
+  }
 }//End mousePressed
 //
 //End MAIN
